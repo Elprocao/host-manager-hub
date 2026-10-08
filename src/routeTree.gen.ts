@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedServersIdRouteImport } from './routes/_authenticated/servers.$id'
 import { Route as ApiPublicAgentSyncRouteImport } from './routes/api/public/agent/sync'
 
 const IndexRoute = IndexRouteImport.update({
@@ -34,6 +35,11 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedServersIdRoute = AuthenticatedServersIdRouteImport.update({
+  id: '/servers/$id',
+  path: '/servers/$id',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const ApiPublicAgentSyncRoute = ApiPublicAgentSyncRouteImport.update({
   id: '/api/public/agent/sync',
   path: '/api/public/agent/sync',
@@ -44,12 +50,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/servers/$id': typeof AuthenticatedServersIdRoute
   '/api/public/agent/sync': typeof ApiPublicAgentSyncRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/servers/$id': typeof AuthenticatedServersIdRoute
   '/api/public/agent/sync': typeof ApiPublicAgentSyncRoute
 }
 export interface FileRoutesById {
@@ -58,19 +66,22 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/servers/$id': typeof AuthenticatedServersIdRoute
   '/api/public/agent/sync': typeof ApiPublicAgentSyncRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/dashboard' | '/api/public/agent/sync'
+  fullPaths:
+    '/' | '/auth' | '/dashboard' | '/servers/$id' | '/api/public/agent/sync'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/dashboard' | '/api/public/agent/sync'
+  to: '/' | '/auth' | '/dashboard' | '/servers/$id' | '/api/public/agent/sync'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
     | '/_authenticated/dashboard'
+    | '/_authenticated/servers/$id'
     | '/api/public/agent/sync'
   fileRoutesById: FileRoutesById
 }
@@ -111,6 +122,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/servers/$id': {
+      id: '/_authenticated/servers/$id'
+      path: '/servers/$id'
+      fullPath: '/servers/$id'
+      preLoaderRoute: typeof AuthenticatedServersIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/api/public/agent/sync': {
       id: '/api/public/agent/sync'
       path: '/api/public/agent/sync'
@@ -123,10 +141,12 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedServersIdRoute: typeof AuthenticatedServersIdRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedServersIdRoute: AuthenticatedServersIdRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

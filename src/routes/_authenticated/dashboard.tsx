@@ -118,8 +118,11 @@ function CreateServerDialog() {
     setRam(k === "proxy" ? "512" : "2048");
   }
 
-  async function create() {
-    if (!name.trim()) return toast.error("Ponle un nombre");
+  async function create(): Promise<void> {
+    if (!name.trim()) {
+      toast.error("Ponle un nombre");
+      return;
+    }
     setBusy(true);
     const { data: u } = await supabase.auth.getUser();
     const { data, error } = await supabase
