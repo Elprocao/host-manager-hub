@@ -14,16 +14,169 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      commands: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          created_by: string
+          error: string | null
+          id: string
+          payload: Json
+          result: Json | null
+          server_id: string
+          status: string
+          type: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string
+          error?: string | null
+          id?: string
+          payload?: Json
+          result?: Json | null
+          server_id: string
+          status?: string
+          type: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string
+          error?: string | null
+          id?: string
+          payload?: Json
+          result?: Json | null
+          server_id?: string
+          status?: string
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "commands_server_id_fkey"
+            columns: ["server_id"]
+            isOneToOne: false
+            referencedRelation: "servers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      server_agents: {
+        Row: {
+          created_at: string
+          server_id: string
+          token_hash: string
+        }
+        Insert: {
+          created_at?: string
+          server_id: string
+          token_hash: string
+        }
+        Update: {
+          created_at?: string
+          server_id?: string
+          token_hash?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "server_agents_server_id_fkey"
+            columns: ["server_id"]
+            isOneToOne: true
+            referencedRelation: "servers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      server_members: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          role: Database["public"]["Enums"]["member_role"]
+          server_id: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          role?: Database["public"]["Enums"]["member_role"]
+          server_id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          role?: Database["public"]["Enums"]["member_role"]
+          server_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "server_members_server_id_fkey"
+            columns: ["server_id"]
+            isOneToOne: false
+            referencedRelation: "servers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      servers: {
+        Row: {
+          agent_last_seen: string | null
+          console_tail: string
+          created_at: string
+          id: string
+          kind: string
+          mc_version: string
+          name: string
+          owner_email: string | null
+          owner_id: string
+          ram_mb: number
+          software: string
+          status: string
+        }
+        Insert: {
+          agent_last_seen?: string | null
+          console_tail?: string
+          created_at?: string
+          id?: string
+          kind: string
+          mc_version?: string
+          name: string
+          owner_email?: string | null
+          owner_id: string
+          ram_mb?: number
+          software: string
+          status?: string
+        }
+        Update: {
+          agent_last_seen?: string | null
+          console_tail?: string
+          created_at?: string
+          id?: string
+          kind?: string
+          mc_version?: string
+          name?: string
+          owner_email?: string | null
+          owner_id?: string
+          ram_mb?: number
+          software?: string
+          status?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      can_issue: {
+        Args: { _server_id: string; _type: string }
+        Returns: boolean
+      }
+      server_role: { Args: { _server_id: string }; Returns: string }
     }
     Enums: {
-      [_ in never]: never
+      member_role: "admin" | "editor" | "viewer"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +303,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      member_role: ["admin", "editor", "viewer"],
+    },
   },
 } as const
