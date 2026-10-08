@@ -48,14 +48,14 @@ function ServerPage() {
   const { id } = Route.useParams();
   const { data } = useSuspenseQuery(serverQuery(id));
   if (!data) return <NoAccess />;
-  return <ServerWorkspace id={id} data={data} />;
+  return <ServerWorkspace id={id} data={data as any} />;
 }
 
 function NoAccess() {
   return <div className="min-h-screen"><AppHeader /><main className="mx-auto max-w-6xl px-4 py-10"><p>No tienes acceso a este servidor.</p><Link to="/dashboard" className="text-primary">Volver al dashboard</Link></main></div>;
 }
 
-function ServerWorkspace({ id, data }: { id: string; data: NonNullable<Awaited<ReturnType<typeof serverQuery>["queryFn"]>> }) {
+function ServerWorkspace({ id, data }: { id: string; data: any }) {
   const { server, role } = data;
   const online = isAgentOnline(server.agent_last_seen);
   const [root, setRoot] = useState<AnyHandle>(null);
